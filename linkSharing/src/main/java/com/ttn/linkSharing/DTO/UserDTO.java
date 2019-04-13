@@ -1,14 +1,20 @@
 package com.ttn.linkSharing.DTO;
 
+import com.ttn.linkSharing.entities.Rating;
+import com.ttn.linkSharing.entities.Subscription;
 import com.ttn.linkSharing.enums.Role;
 import com.ttn.linkSharing.enums.Visibility;
 import org.hibernate.annotations.UpdateTimestamp;
 import org.springframework.data.annotation.CreatedDate;
 
+import javax.persistence.CascadeType;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.persistence.OneToMany;
 import javax.validation.constraints.Email;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 public class UserDTO {
     private Integer id;
@@ -31,17 +37,29 @@ public class UserDTO {
     private Date createdDate;
 
     private Date updatedDate;
-    private  Integer topicId;
-    private String createdBy;
-    @CreatedDate
-    private Date createdOn;
-    @UpdateTimestamp
-    private Date updatedOn;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "user",orphanRemoval = true)
+    private List<Subscription> subscriptions = new ArrayList<>();
 
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "user",orphanRemoval = true)
+    private List<Rating> ratings = new ArrayList<>();
 
-    @Enumerated(EnumType.STRING)
-    private Visibility visibility;
-    private String topicName;
+    public List<Subscription> getSubscriptions() {
+        return subscriptions;
+    }
+
+    public UserDTO setSubscriptions(List<Subscription> subscriptions) {
+        this.subscriptions = subscriptions;
+        return this;
+    }
+
+    public List<Rating> getRatings() {
+        return ratings;
+    }
+
+    public UserDTO setRatings(List<Rating> ratings) {
+        this.ratings = ratings;
+        return this;
+    }
 
     public Integer getId() {
         return id;
@@ -142,59 +160,6 @@ public class UserDTO {
         return this;
     }
 
-    public Integer getTopicId() {
-        return topicId;
-    }
-
-    public UserDTO setTopicId(Integer topicId) {
-        this.topicId = topicId;
-        return this;
-    }
-
-    public String getCreatedBy() {
-        return createdBy;
-    }
-
-    public UserDTO setCreatedBy(String createdBy) {
-        this.createdBy = createdBy;
-        return this;
-    }
-
-    public Date getCreatedOn() {
-        return createdOn;
-    }
-
-    public UserDTO setCreatedOn(Date createdOn) {
-        this.createdOn = createdOn;
-        return this;
-    }
-
-    public Date getUpdatedOn() {
-        return updatedOn;
-    }
-
-    public UserDTO setUpdatedOn(Date updatedOn) {
-        this.updatedOn = updatedOn;
-        return this;
-    }
-
-    public Visibility getVisibility() {
-        return visibility;
-    }
-
-    public UserDTO setVisibility(Visibility visibility) {
-        this.visibility = visibility;
-        return this;
-    }
-
-    public String getTopicName() {
-        return topicName;
-    }
-
-    public UserDTO setTopicName(String topicName) {
-        this.topicName = topicName;
-        return this;
-    }
 
     public String getFullName() {
         return firstName + " " + lastName;

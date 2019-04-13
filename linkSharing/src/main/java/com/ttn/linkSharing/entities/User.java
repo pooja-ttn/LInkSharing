@@ -2,18 +2,20 @@ package com.ttn.linkSharing.entities;
 
 import com.ttn.linkSharing.enums.Role;
 import org.hibernate.annotations.UpdateTimestamp;
-import org.hibernate.validator.constraints.UniqueElements;
 import org.springframework.data.annotation.CreatedDate;
 
 import javax.persistence.*;
 import javax.validation.constraints.Email;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 
 @Entity
 @Table(name = "user")
 public class User implements Serializable {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
@@ -51,6 +53,30 @@ public class User implements Serializable {
     @UpdateTimestamp
     @Column(name = "updated_date")
     private Date updatedDate;
+
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "user",orphanRemoval = true)
+    private List<Subscription> subscriptions = new ArrayList<>();
+
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "user",orphanRemoval = true)
+    private List<Rating> ratings = new ArrayList<>();
+
+    public List<Subscription> getSubscriptions() {
+        return subscriptions;
+    }
+
+    public User setSubscriptions(List<Subscription> subscriptions) {
+        this.subscriptions = subscriptions;
+        return this;
+    }
+
+    public List<Rating> getRatings() {
+        return ratings;
+    }
+
+    public User setRatings(List<Rating> ratings) {
+        this.ratings = ratings;
+        return this;
+    }
 
     public Boolean getVerified() {
         return verified;

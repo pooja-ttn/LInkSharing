@@ -1,0 +1,87 @@
+
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Trending Topic</title>
+</head>
+<body>
+<div th:fragment="TrendingTopic">
+    <div class="card mt-4" style="font-family: fantasy; border: blue 1px solid">
+        <div class="card-header bg-primary text-white p-2">
+            <b>Trending Topics</b>
+        </div>
+        <div class="card-body p-2">
+            <div class="row">
+                <div class="col">
+                    <div class="row">
+                        <div class="col-md-2">
+                            <img th:src="${'images/'+userCO.photo}" alt="image" width="70px"
+                                 height="70px" style="border-radius: 50%">
+                        </div>
+
+                        <div class="col-md-10">
+                            <div class="form-control-md ml-2" style="font-family: fantasy">
+                                <a href="#">Topic</a>
+                            </div>
+                            <div class="card-text form-control-sm"
+                                 style="text-align: justify; font-family: fantasy">
+                                <div class="row mt-2">
+                                    <div class="col">
+                                        <div class="p-0">@Username</div>
+                                        <div>
+                                            <a href="#">Unsubscribe</a>
+                                        </div>
+                                    </div>
+                                    <div class="col">
+                                        <div class="p-0">Subscriptions</div>
+                                        <div id="subscriptions-trendingTopics">
+                                            <p th:name="subscrption">50</p>
+                                        </div>
+                                    </div>
+                                    <div class="col">
+                                        <div class="p-0">Post</div>
+                                        <div>
+                                            <p th:name="postNumber">3</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col dropdown show " th:object="${subscriptionCO}">
+
+                            <div><select name="seriousness" class="col-md-12 mb-4 text-black"
+                                         th:field="${subscriptionCO.seriousness}" id="seriousness" style="max-width:100%;font-size:15px;">
+                                <small><option th:each="seriousness:${T(com.ttn.linkSharing.enums.Seriousness).values()}"
+                                        th:value="${seriousness}"
+                                               th:text="${seriousness}"></option></small>
+                            </select>
+                            </div>
+                        </div>
+                        <div class="col dropdown show m-0" th:object="${topicCO}">
+
+                            <div><select name="visibility" class="col-md-8 ml-2 mb-4 text-black"
+                                         th:field="${topicCO.visibility}" id="visibility" style="max-width:100%;font-size:15px; ">
+                                <small><option th:each="visibility:${T(com.ttn.linkSharing.enums.Visibility).values()}"
+                                        th:value="${visibility}"
+                                               th:text="${visibility}"></option></small>
+
+                            </select>
+                            </div>
+                        </div>
+                        <div class="col float-right">
+                            <a href="#"><i class="far fa-envelope fa-lg mr-2"></i></a>
+                            <a href="#"><i class="fas fa-edit fa-lg mr-2"></i></a>
+                            <a href="#"><i class="far fa-trash-alt fa-lg"></i></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

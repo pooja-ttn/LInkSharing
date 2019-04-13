@@ -40,7 +40,7 @@ import java.util.Properties;
             Properties jpaProperties= new Properties();
             jpaProperties.setProperty("hibernate.dialect","org.hibernate.dialect.MySQL5Dialect");
             jpaProperties.setProperty("hibernate.show_sql","true");
-            jpaProperties.setProperty("hibernate.hbm2ddl.auto","update");
+            jpaProperties.setProperty("hibernate.hbm2ddl.auto","create");
 
             entityManagerFactoryBean.setJpaProperties(jpaProperties);
             return entityManagerFactoryBean;
@@ -52,11 +52,6 @@ import java.util.Properties;
             transactionManager.setEntityManagerFactory(entityManagerFactory);
             return transactionManager;
         }
-/*
-        @Bean
-    ModelMapper modelMapper(){
-            return new ModelMapper();
-        }*/
 
 
 

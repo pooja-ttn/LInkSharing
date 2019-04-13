@@ -1,11 +1,13 @@
 package com.ttn.linkSharing.controllers;
 
-import com.ttn.linkSharing.CO.LoginCO;
+import com.ttn.linkSharing.CO.*;
 import com.ttn.linkSharing.DTO.UserDTO;
 import com.ttn.linkSharing.convertor.DTOToEntityViceVersaConvertor;
 import com.ttn.linkSharing.entities.User;
 import com.ttn.linkSharing.services.LoginService;
-import com.ttn.linkSharing.services.UserSignUpService;
+import com.ttn.linkSharing.services.SubscriptionService;
+import com.ttn.linkSharing.services.TopicService;
+import com.ttn.linkSharing.services.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +16,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.util.Optional;
@@ -22,31 +25,76 @@ import java.util.Optional;
 public class LoginController {
 
     @Autowired
-    UserSignUpService userService;
+    UserService userService;
     @Autowired
     LoginService loginService;
     Logger logger = LoggerFactory.getLogger(LoginController.class);
 
+    @Autowired
+    TopicService topicService;
+    @Autowired
+    SubscriptionService subscriptionService;
 
-    @RequestMapping(value = "/loginButton", method = RequestMethod.POST)
+
+    @RequestMapping(value = "/loginButton")
     public String login(@ModelAttribute("loginCO") LoginCO loginCO, HttpServletRequest request, Model model) {
         Optional<User> optionalUser = loginService.checkLoginPassword(loginCO);
+        logger.debug("Checking Password");
         if (optionalUser.isPresent()) {
-                UserDTO userDTO = DTOToEntityViceVersaConvertor.EntityToDTO(optionalUser.get());
-                HttpSession session = request.getSession();
-                session.setAttribute("user", userDTO);
-                return "redirect:/dashboard";
-            }
+            logger.debug("PASSWORD Matched");
+            UserDTO userDTO = DTOToEntityViceVersaConvertor.EntityToDTO(optionalUser.get());
+            logger.debug(userDTO.toString());
+            HttpSession session = request.getSession();
+            session.setAttribute("user", userDTO);
+            logger.debug("userDTO.getUserName()----------" + userDTO.getUserName());
+            return "redirect:/dashboard";
+        }
         return "redirect:/";
     }
+
+/*
+@RequestMapping(value = "/dashboard",method = RequestMethod.POST)
+public  String dashboardredirect(@ModelAttribute() HttpServletRequest request){
+        HttpSession session=request.getSession(false);
+        session.getAttribute("userCO");
+        return "redirect:/loginButton";
+}*/
 
 
     @RequestMapping(value = "/dashboard", method = RequestMethod.GET)
     public String dashboard(HttpServletRequest request, Model model) {
         HttpSession httpSession = request.getSession(false);
         if (httpSession.getAttribute("user") != null) {
-            model.addAttribute("userCO",httpSession.getAttribute("user"));
+            System.out.println("------------------------------");
+            logger.debug("--------------------Entered getSession");
+            UserDTO userDTO = (UserDTO) httpSession.getAttribute("user");
+            model.addAttribute("topicList", topicService.topicCreatedBy(userDTO.getUserName()));
+            logger.debug("-------------------------Got topic");
+            model.addAttribute("Alltopic", subscriptionService.showAllSubscribedTopic(userDTO.getUserName()));
+/*
+            model.addAttribute("subscriptionList", subscriptionService.subscriptionById(userDTO.getId()));
+*/
+
+            logger.debug("Before Userco");
+            model.addAttribute("userCO", userDTO);
+            logger.debug("Before topicCO");
+            model.addAttribute("topicCO", new TopicCO());
+            logger.debug("before Subscription");
+            model.addAttribute("subscriptionCO", new SubscriptionCO());
+            logger.debug("before Linkresource");
+            model.addAttribute("linkResourceCO", new LinkResourceCO());
+            logger.debug("Before DocumentResource");
+            model.addAttribute("documentResourceCO", new DocumentResourceCO());
             return "dashboard";
+        }
+        return "redirect:/";
+    }
+
+    @RequestMapping("/logout")
+    public String dashboard(HttpServletRequest request) {
+        HttpSession session = request.getSession(false);
+        if (session.getAttribute("user") != null) {
+            session.invalidate();
         }
         return "redirect:/";
     }

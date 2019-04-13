@@ -1,0 +1,40 @@
+
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>User Details</title>
+</head>
+<body>
+<div th:fragment="UserDetail">
+    <div class="card">
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-4">
+                    <a href="/userProfile"><img th:src="${'images/' + userCO.photo}" alt="profile-picture" width="100px" height="100px"></a>
+                </div>
+                <div class="col-md-8 form-control-sm" style="font-family: fantasy">
+                    <div class="card-title mb-0">
+                        <a href="/userProfile"><b><span th:text="${userCO.getFullName()}"></span></b></a>
+                    </div>
+                    <div class="card-text mt-0">
+                        <a href="/userProfile">@<span th:text="${userCO.getUserName()}"></span></a>
+                    </div>
+                    <div class="row">
+                        <div class="col-6 card-text mt-3">
+                            <p class="m-0 p-0">Subscriptions</p>
+                            <p class="m-0 p-0" th:text="${Alltopic.size()}"><!-- th:text="${userCO.getSubscriptions().size()}-->"></p>
+                        </div>
+                        <div class="col-6 card-text mt-3">
+                            <p class="m-0 p-0">Topics</p>
+                            <p class="m-0 p-0" id="topicCount" th:text="${topicList.size()}"></p>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

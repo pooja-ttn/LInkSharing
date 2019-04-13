@@ -44,8 +44,54 @@ $(document).ready(function() {
 
     });
 
+/*
+    $("#createTopicSaveButton").onclick(function (event) {
+        event.preventDefault();
+        alert("message",visibility)
+        $.ajax({
+            url:"/createTopic",
+            method:"POST",
+
+        }).done(function (data) {
+            var response=data.response;
+            if(response!=null)
+            {
+                $("#topicCount").html(response.size);
+            }
+
+
+        })
+
+
+    });*/
 
 });
+
+
+
+$("#userName").focusout(function () {
+
+    var uname = $("#userName").val();
+    var email=$("#email").val();
+
+    $.ajax({
+        url: "/checkUsernameAvailability",
+        data: {uname: uname,email:email},
+        method: "GET"
+    }).done(function (data) {
+        if (data==="true") {
+            $('#unameMsg').text("Username already exists");
+            console.log(data);
+        }
+        else
+        {
+            $('#unameMsg').text(" ");
+        }
+
+    });
+
+});
+
 
 /*
    $(document).on('click', '#registerButton1', function (event) {
@@ -70,26 +116,4 @@ $(document).ready(function() {
 
         });
 */
-
-$("#registerButton1").click(function () {
-
-    var uname = $("#userName").val();
-    var email=$("#email").val();
-
-    $.ajax({
-        url: "/checkUsernameAvailability",
-        data: {uname: uname,email:email},
-        method: "GET"
-    }).done(function (data) {
-        if (data=="true") {
-            $('#unameMsg').text("Email or Username already exists");
-            console.log(data);
-        }
-
-    });
-
-});
-
-
-
 

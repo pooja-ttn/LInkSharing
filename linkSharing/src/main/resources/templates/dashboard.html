@@ -23,75 +23,157 @@
 <div class="container-fluid">
 
     <!--navigatioin bar-->
-<div th:include="~{fragments/header}"></div>
-<div class="container-fluid">
-    <div class="row">
-        <div class="col-md-4 ml-5">
-            <div class="card">
-                <div class="card-body">
-                    <div class="row">
-                        <div class="col-md-4">
-                            <img th:src="@{images/User.png}" alt="profile-picture" width="100px" height="100px"></div>
-                        <div class="col-md-8 form-control-sm" style="font-family: fantasy">
-                            <div class="card-title mb-0">
-                                <b><p th:text="${userCO.fullName}"></p></b>
-                            </div>
-                            @<div class="card-text mt-0" th:text="${userCO.getUserName()}">
-                            </div>
-                            <div class="row">
-                                <div class="col-6 card-text mt-3">
-                                    <p class="m-0 p-0">Subscriptions</p>
-                                    <p class="m-0 p-0">50</p>
-                                </div>
-                                <div class="col-6 card-text mt-3">
-                                    <p class="m-0 p-0">Topics</p>
-                                    <p class="m-0 p-0">50</p>
-                                </div>
-                            </div>
+    <div th:include="~{fragments/header}"></div>
 
+    <!--dashboard body-->
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-4 ml-5">
+
+                <!--user detail-->
+                <div th:include="~{fragments/UserDetail}"></div>
+
+                <!--subscription-->
+                <div class="card mt-4" style="font-family: fantasy; border: blue 1px solid">
+                    <div class="card-header bg-primary text-white p-2">
+                        <b>Subscriptions</b>
+                    </div>
+                    <div class="card-body p-2" >
+                        <div class="row" th:each="subscribedTopic:${Alltopic}">
+
+                            <!--th:each="userSubscription : ${userCO.getUserSubscriptions()}"-->
+
+                            <div class="col">
+                                <div class="row">
+                                    <div class="col-md-2">
+                                        <img th:src="${'images/'+subscribedTopic.getUser().photo}" alt="image" width="70px"
+                                             height="70px" style="border-radius: 50%">
+                                    </div>
+
+                                    <div class="col-md-10">
+                                        <div class="form-control-md ml-2" style="font-family: fantasy">
+                                            <a href="#" th:text="${subscribedTopic.getTopic().getName()}"></a>
+
+
+                                        </div>
+                                        <div class="card-text form-control-sm"
+                                             style="text-align: justify; font-family: fantasy">
+                                            <div class="row mt-2">
+                                                <div class="col">
+                                                    <div class="p-0" th:text="${subscribedTopic.getTopic().getCreatedBy()}">
+
+                                                    </div>
+                                                    <div>
+
+                                                        <a href="#">Unsubscribe</a>
+                                                    </div>
+                                                </div>
+                                                <div class="col">
+                                                    <div class="p-0">Subscriptions</div>
+                                                    <div id="subscriptions">
+                                                        <p th:name="subscription" th:text="${subscribedTopic.topic.subscriptionCount}">
+                                                        </p>
+                                                    </div>
+                                                </div>
+                                                <div class="col">
+                                                    <div class="p-0">Post</div>
+                                                    <div>
+                                                        <p th:name="postNumber" th:text="${subscribedTopic.topic.postCount}">
+                                                        </p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col dropdown show " th:object="${subscriptionCO}">
+
+                                        <div><select name="seriousness" class="col-md-8 mb-4 text-black"
+                                                     th:field="*{seriousness}"
+                                                     style="max-width:100%;font-size:15px;">
+                                            <option th:each="seriousness:${T(com.ttn.linkSharing.enums.Seriousness).values()}"
+                                                    th:value="${seriousness}"
+                                                    th:text="${seriousness}"></option>
+                                        </select>
+                                        </div>
+                                    </div>
+                                    <div class="col dropdown show m-0" th:object="${topicCO}">
+
+                                        <div><select name="visibility" class="col-md-4 ml-2 mb-4 text-black"
+                                                     th:field="${topicCO.visibility}" id="visibility"
+                                                     style="max-width:100%;font-size:15px;">
+                                            <small>
+                                                <option th:each="visibility:${T(com.ttn.linkSharing.enums.Visibility).values()}"
+                                                        th:value="${visibility}"
+                                                        th:text="${visibility}"></option>
+                                            </small>
+
+                                        </select>
+                                        </div>
+                                    </div>
+
+                                        <div class="col float-right">
+                                            <a href="#"><i class="far fa-envelope fa-lg mr-2"></i></a>
+                                            <a href="#"><i class="fas fa-edit fa-lg mr-2"></i></a>
+                                            <a href="#"><i class="far fa-trash-alt fa-lg"></i></a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!--trending topics-->
+                    <div th:include="~{fragments/TrendingTopic}"></div>
+                </div>
+
+                <div class="col-md-7" style="font-family: fantasy">
+
+                    <!--inbox-->
+                    <div class="card" style="border: blue 1px solid">
+                        <div class="card-header bg-primary text-white p-2">
+                            <b>Inbox</b>
+                        </div>
+                        <div class="card-body p-2">
+                            <div class="row">
+                                <div class="col">
+                                    <div class="row">
+                                        <div class="col-md-2">
+                                            <img th:src="${'images/'+userCO.photo}" alt="image" width="80px"
+                                                 height="80px" style="border-radius: 50%">
+                                        </div>
+
+                                        <div class="col-10 pl-0">
+                                            <div class="form-control-md mr-1" style="font-family: fantasy">
+                                                <b>Username</b>
+                                                <a href="#">@userid</a>
+                                                <a href="#" class="float-right">Topic</a>
+                                            </div>
+                                            <div class="card-text form-control-sm p-0"
+                                                 style="text-align: justify; font-family: fantasy">
+                                                Lorem ipsum dolor sit amet, consectetur adipisicing elit. Consequuntur
+                                                dolore dolores doloribus earum enim et excepturi facere fuga ipsa ipsu
+                                            </div>
+                                            <div class="row float-right mr-2">
+                                                <a class="mr-3" href="" download >Download</a>
+                                                <a class="mr-3" href="#" target="_blank">View full site</a>
+                                                <a class="mr-3" href="#">Mark as read</a>
+                                                <a href="/resource">View post</a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
-
-            <!--subscription-->
-            <div class="card mt-4" style="font-family: fantasy">
-                <div class="card-header bg-primary text-white p-2">
-                    <b>Subscriptions</b>
-                </div>
-                <div class="card-body p-2">
-                    body text
-                </div>
-            </div>
-
-            <!--trending topics-->
-            <div class="card mt-4"  style="font-family: fantasy">
-                <div class="card-header bg-primary text-white p-2">
-                    <b>Trending Topics</b>
-                </div>
-                <div class="card-body p-2">
-                    trending topics body
-                </div>
-            </div>
         </div>
 
-        <div class="col-md-7" style="font-family: fantasy">
-
-            <!--inbox-->
-            <div class="card">
-                <div class="card-header bg-primary text-white p-2">
-                    <b>Inbox</b>
-                </div>
-                <div class="card-body p-2">
-                    inbox body
-                </div>
-            </div>
-        </div>
+        <!--footer-->
+        <div th:include="~{fragments/footer}"></div>
     </div>
-</div>
-
-<!--footer-->
-<div th:include="~{fragments/footer}"></div>
-</div>
 </body>
 </html>
