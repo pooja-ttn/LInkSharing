@@ -11,6 +11,7 @@ import com.ttn.linkSharing.entities.User;
 import com.ttn.linkSharing.repositories.LinkResourceRepository;
 import com.ttn.linkSharing.repositories.SubscriptionRepository;
 import com.ttn.linkSharing.repositories.TopicRepository;
+import org.hibernate.validator.constraints.NotEmpty;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -46,6 +47,10 @@ public class LinkResourceService {
 
     }
 
+    public void deletewhereTopicId(Integer integer){
+        linkResourceRepository.deleteAllByTopic_Id(integer);
+    }
+
     public void saveLinkResource(LinkResource linkResource){
         linkResourceRepository.save(linkResource);
     }
@@ -55,6 +60,10 @@ public class LinkResourceService {
         return linkResourceRepository.findByTopic(topic);
 
     }
+
+/*
+    public List<LinkResource> findLinkResource()
+*/
 
 
 

@@ -15,9 +15,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class TopicService {
@@ -40,6 +42,7 @@ public class TopicService {
         topic.setName(topicCO.getTopicName());
         topic.setCreatedBy(user.getUserName());
         topic.setCreatedOn(new Date());
+        topic.setPhoto(user.getPhoto());
         subscription.setUser(user);
         subscription.setTopic(topic);
         subscription.setSeriousness(Seriousness.VERY_SERIOUS);
@@ -86,4 +89,40 @@ public class TopicService {
         topicRepository.save(topic);
     }
 
+
+    public List<Topic> findAllTopic(){
+        return topicRepository.findAllByVisibilityOrderByPostCountDesc(Visibility.PUBLIC);
+    }
+
+    @Transactional
+    public void deleteTopic(Integer topicId){
+
+        subscriptionService.deleteSubscriptionIdWhereTopicId(topicId);
+        linkResourceService.deletewhereTopicId(topicId);
+        documentResourceService.deletewhereTopicId(topicId);
+        topicRepository.deleteById(topicId);
+    }
+
+
+    public Optional<Topic> findById(Integer integer)
+    {
+        return topicRepository.findById(integer);
+    }
+
+    public String editTopic(String newTopic, Integer id, UserDTO user) {
+
+        Topic topic = topicRepository.findById(id).orElse(null);
+
+        if(user == null) {
+            return "redirect:/";
+        }
+        else if(topic == null) {
+            return "redirect:/dashboard";
+        }
+        else {
+            topic.setName(newTopic);
+            topicRepository.save(topic);
+            return "redirect:/dashboard";
+        }
+    }
 }

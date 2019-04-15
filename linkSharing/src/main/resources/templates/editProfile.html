@@ -1,0 +1,197 @@
+
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Edit Profile</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+          integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
+          crossorigin="anonymous">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css"
+          integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf"
+          crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
+            integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+            crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+            integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+            crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
+            integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+            crossorigin="anonymous"></script>
+
+
+</head>
+
+<body>
+<div class="container-fluid">
+
+    <!--navigatioin bar-->
+
+    <div th:fragment="headerWithoutModal">
+        <nav class="navbar navbar-light bg-light justify-content-between mr-5 ml-5 mt-2 mb-3 pr-5 pl-5 rounded">
+            <a class="navbar-brand">
+                <img src="images/LinkShare.png" width="40px" height="40px">
+                <en style="font-weight: bold; color: blue; font-family: 'fantasy'">Link Sharing</en>
+            </a>
+            <div class="form-inline">
+                <div class="input-group md-form form-sm form-1 pl-0">
+                    <div class="input-group-prepend">
+                    <span class="input-group-text purple lighten-3" id="basic-text1">
+                        <i class="fas fa-search text-white" aria-hidden="true"></i>
+                    </span>
+                    </div>
+                    <input class="form-control my-0 py-1" type="text" placeholder="Search" aria-label="Search">
+                </div>
+
+                <a href="#" class="ml-5"><img th:src="@{'/images/'+${userCO.photo}}" height="40" width="40px"
+                                              style="border-radius: 50%"></a>
+                <div class="btn-group">
+                    <button type="button" class="btn btn-sm btn-light dropdown-toggle" data-toggle="dropdown"
+                            aria-haspopup="true" aria-expanded="false" th:text="${userCO.userName}">
+
+                    </button>
+                    <div class="dropdown-menu">
+                        <a class="dropdown-item" th:href="@{/Profile}">
+                            <small>Profile</small>
+                        </a>
+                        <a class="dropdown-item" th:href="@{/UserDetail}">
+                            <small>Users</small>
+                        </a>
+                        <a class="dropdown-item" th:href="@{/Topic}">
+                            <small>Topics</small>
+                        </a>
+                        <a class="dropdown-item" th:href="@{/post}">
+                            <small>Posts</small>
+                        </a>
+                        <a class="dropdown-item" href="/logout">
+                            <small>Logout</small>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+        </nav>
+    </div>
+    <!--edit profile body-->
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-4 ml-5">
+
+                <!--user detail-->
+                <div th:include="~{fragments/UserDetail}"></div>
+
+                <!--trending topics-->
+                <div th:include="~{fragments/Topic}"></div>
+            </div>
+
+            <div class="col-md-7" style="font-family: fantasy">
+
+                <!--update profile-->
+                <div class="card" style="border: blue 1px solid">
+                    <div style="font-weight: bold;border-color: white" class="card-header bg-info text-white  ">
+                        <b>Profile</b>
+                    </div>
+                    <div class="card-body p-2">
+                        <div class="row">
+                            <div class="col">
+                                <div class="row p-0 m-0">
+                                    <form style="font-family: fantasy" action="#" th:object="${userCO1}" method="post" ENCTYPE="multipart/form-data" class="col-11 mt-3 mb-3 ml-4" th:action="@{'/editProfile'}">
+                                        <div class="form-group row">
+                                            <label for="firstName" class="col-md-4 col-form-label form-control-sm">First
+                                                Name*: </label>
+                                            <div class="col-md-8">
+                                                <input type="text" class="form-control form-control-sm" id="firstName"
+                                                    th:field="${userCO1.firstName}"   th:default="${userCO.getFirstName()}" name="firstName" th:placeholder="${userCO.getFirstName()}" required>
+                                            </div>
+                                        </div>
+                                        <div class="form-group row">
+                                            <label for="lastName" class="col-md-4 col-form-label form-control-sm" >Last
+                                                Name*: </label>
+                                            <div class="col-md-8">
+                                                <input type="text" class="form-control form-control-sm" id="lastName"
+                                                       th:field="${userCO1.lastName}"   th:default="${userCO.getLastName()}" name="lastName" th:placeholder="${userCO.getLastName()}" required>
+                                            </div>
+                                        </div>
+                                        <div class="form-group row">
+                                            <label for="username"
+                                                   class="col-md-4 col-form-label form-control-sm">Username*: </label>
+                                            <div class="col-md-8">
+                                                <input type="text" class="form-control form-control-sm" id="username"
+                                                        name="username" th:placeholder="${userCO.getUserName()}" disabled>
+                                            </div>
+                                        </div>
+                                        <div class="form-group row">
+                                            <label class="col-md-4 col-form-label form-control-sm" for="photoPath">
+                                                Photo:
+                                            </label>
+                                            <div class="input-group col-8">
+                                                <div class="custom-file form-control-sm">
+                                                    <input type="file" class="custom-file-input" id="photoPath" th:placeholder="${userCO.getPhoto()}"
+                                                       th:default="${userCO.getPhoto()}" aria-describedby="inputGroupFileAddon01" name="photoPath" required>
+                                                    <label class="custom-file-label" for="photoPath">Choose file</label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <input type="submit" class="btn btn-primary btn-sm col-5" value="Update"
+                                               style="float: right;" >
+
+                                        <div class="text text-success mt-3" th:text="${successEdit}?${successEdit}"></div>
+
+                                    </form>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!--change password-->
+                <div class="card mt-4" style="border: blue 1px solid">
+                    <div style="font-weight: bold;border-color: white" class="card-header bg-info text-white  ">
+                        <b>Change Password</b>
+                    </div>
+                    <div class="card-body p-2">
+                        <div class="row">
+                            <div class="col">
+                                <div class="row p-0 m-0">
+                                    <form style="font-family: fantasy" th:action="@{'/editPassword'}" th:object="${userCO1}" method="post" ENCTYPE="multipart/form-data" class="col-11 mt-3 mb-3 ml-4">
+                                        <div class="form-group row">
+                                            <label for="password" class="col-md-4 col-form-label form-control-sm">Password* </label>
+                                            <div class="col-md-8">
+                                                <input type="password" class="form-control form-control-sm" id="password"
+                                                       th:field="${userCO1.password}"  name="password" placeholder="Password" required>
+                                            </div>
+                                        </div>
+                                        <div class="form-group row">
+                                            <label for="confirmPassword" class="col-md-4 col-form-label form-control-sm">Confirm
+                                                Password* </label>
+                                            <div class="col-md-8">
+                                                <input type="password" class="form-control form-control-sm" id="confirmPassword"
+                                                       name="confirmPassword" placeholder="Confirm Password" required>
+                                            </div>
+                                        </div>
+                                        <input type="submit" class="btn btn-primary btn-sm col-5" value="Update"
+                                               style="float: right" >
+
+                                        <div class="text text-success mt-3" th:text="${successEditPassword}?${successEditPassword}"></div>
+
+                                    </form>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!--footer-->
+    <div th:include="~{fragments/footer}"></div>
+
+</div>
+</body>
+</html>
+
+

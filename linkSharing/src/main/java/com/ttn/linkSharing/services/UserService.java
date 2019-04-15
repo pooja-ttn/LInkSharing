@@ -1,5 +1,6 @@
 package com.ttn.linkSharing.services;
 import com.ttn.linkSharing.CO.UserCO;
+import com.ttn.linkSharing.Utils.PassWordUtils;
 import com.ttn.linkSharing.convertor.COToEntityViceVersaConvertor;
 import com.ttn.linkSharing.entities.User;
 import com.ttn.linkSharing.enums.Role;
@@ -8,6 +9,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.view.InternalResourceViewResolver;
+
 import javax.validation.Valid;
 import java.io.IOException;
 import java.net.PortUnreachableException;
@@ -15,6 +18,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Date;
+import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
@@ -42,9 +46,9 @@ public class UserService {
     }
 
 
-    public Boolean findByUserNameOrEmail(String userName, String email) {
+    public Boolean findByEmail( String email) {
 
-        if (Objects.nonNull(userRepository.findByUserNameOrEmail(userName, email))) {
+        if (Objects.nonNull(userRepository.findByEmail(email))) {
             return true;
         }
         return false;
@@ -53,31 +57,64 @@ public class UserService {
 
 
 
+
     public void saveUser(@Valid @ModelAttribute User user, MultipartFile file) throws IOException {
         user.setRole(Role.USER);
-        user.setVerified(true);
-        if (file.equals(null) || file.isEmpty()) {
-            user.setPhoto(user.getUserName() + "_" + "User.png");
-
-        }
         user.setCreatedDate(new Date());
         user.setUpdatedDate(new Date());
         user.setActive(true);
-        try {
+        user.setVerified(true);
+        if (file.isEmpty()) {
+            user.setPhoto("User.png");
 
-            byte[] bytes = file.getBytes();
-            Path path = Paths.get(UPLOAD_FILE + user.getUserName() + "_" + file.getOriginalFilename());
-            Files.write(path, bytes);
-            user.setPhoto(user.getUserName() + "_" + file.getOriginalFilename());
-        } catch (IOException e) {
-            e.printStackTrace();
+        }
+        else {
+
+            try {
+
+                byte[] bytes = file.getBytes();
+                Path path = Paths.get(UPLOAD_FILE + user.getUserName() + "_" + file.getOriginalFilename());
+                Files.write(path, bytes);
+                user.setPhoto(user.getUserName() + "_" + file.getOriginalFilename());
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
         userRepository.save(user);
 
     }
 
+   public Optional<User> findUserByEmail(String email){
+        return userRepository.findByEmail(email);
 
+   }
 
+   public void save(User user)
+   {
+       userRepository.save(user);
+   }
 
+   public Optional<User>findUserByResetToken(String resetToken){
+        return userRepository.findByResetToken(resetToken);
+   }
+
+public List<User> findAll(){
+        return userRepository.findAll();
+}
+
+public void ActiveByUserId(Integer userId) {
+    User user = userRepository.findById(userId).orElse(null);
+    if (user != null) {
+        if(!user.getActive()) {
+            user.setActive(true);
+        }
+        else
+        {
+            user.setActive(false);
+
+        }
+        userRepository.save(user);
+    }
+}
 }
 

@@ -1,0 +1,252 @@
+
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Topic</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+          integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
+          crossorigin="anonymous">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css"
+          integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf"
+          crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
+            integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+            crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+            integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+            crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
+            integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+            crossorigin="anonymous"></script>
+</head>
+
+<body>
+<div class="container-fluid">
+
+    <!--navigatioin bar-->
+    <div th:include="~{fragments/headerForViewTopic}"></div>
+
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-4 ml-5">
+
+                <!--topics-->
+                <div class="card mt-4" style="font-family: fantasy; border: blue 1px solid">
+                    <div class="card-header bg-primary text-white p-2">
+                        <b>Topic : <span th:text="${topic.getName()}"></span></b>
+                    </div>
+                    <div class="card-body p-2">
+                        <div class="row">
+                            <div class="col">
+                                <div class="row">
+                                    <div class="col-md-2">
+
+                                        <img th:src="@{${userCO.photo}}" alt="image" width="70px"
+                                             height="70px" style="border-radius: 50%">
+                                    </div>
+
+                                    <div class="col-md-10">
+                                        <div class="form-control-md ml-2" style="font-family: fantasy">
+                                            <a th:href="@{'/topic/' + ${topic.getId()}}" th:text="${topic.getName()}"></a>
+                                        </div>
+                                        <div class="card-text form-control-sm"
+                                             style="text-align: justify; font-family: fantasy">
+                                            <div class="row mt-2">
+                                                <div class="col">
+                                                    <div class="p-0">@<span th:text="${topic.getCreatedBy()}"></span></div>
+                                                    <div>
+                                                        <a href="#">Unsubscribe</a>
+                                                    </div>
+                                                </div>
+                                                <div class="col">
+                                                    <div class="p-0">Subscriptions</div>
+                                                    <div id="subscriptions-trendingTopics">
+                                                        <p th:name="subscription" th:text="${topic.getSubscriptionCount()}"></p>
+                                                    </div>
+                                                </div>
+                                                <div class="col">
+                                                    <div class="p-0">Post</div>
+                                                    <div>
+                                                        <p th:name="postNumber" th:text="${topic.getPostCount()}"></p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row float-right">
+                                    <div th:text="${subscription.seriousness.name()}"class="form-control ml-2 float-right form-control-sm bg-primary text-white ml-1" id="seriousnessSelect">
+
+                                    </div>
+                                    <a  href="#"><i data-toggle="modal" data-target="#sendInvitation1" class="far fa-envelope fa-lg mr-2" ></i></a>
+
+
+
+
+
+                                    <div class="modal fade" id="sendInvitation1" tabindex="-1" role="dialog"
+                                         aria-labelledby="sendInvitation" aria-hidden="true">
+                                        <div class="modal-dialog" role="document">
+                                            <div class="modal-content">
+                                                <div style="font-weight: bold;border-color: white" class="card-header bg-info text-white  ">
+                                                    <h4 class="modal-title form-control-sm">Send Invitation</h4>
+                                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                        <span aria-hidden="true">&times;</span>
+                                                    </button>
+                                                </div>
+                                                <div class="modal-body">
+                                                    <form method="post" style="font-family:fantasy;" ACTION="#" th:action="@{/invite}">
+                                                        <div class="form-group row">
+                                                            <label for="invitation-Email"
+                                                                   class="col-md-4 col-form-label form-control-sm mb">Email*</label>
+                                                            <div class="col-md-8">
+                                                                <input type="text" class="form-control form-control-sm"
+                                                                       name="invitation-Email"
+                                                                       id="invitation-Email"  placeholder="Name" REQUIRED>
+                                                            </div>
+                                                        </div>
+                                                        <div class="form-group row">
+                                                            <label
+                                                                    class="col-md-4 col-form-label form-control-sm">Topic*</label>
+
+                                                            <input readonly type="text" name="invite-topic-name"   th:placeholder="${topic.getName()}" class="col-md-8 mb-4 text-black"
+                                                                   th:value="${topic.getName()}" />
+
+
+                                                        </div>
+
+                                                        <input type="submit"class="btn btn-info btn-sm" value="INVITE"/>
+                                                        <button type="button" class="btn btn-info btn-sm" data-dismiss="modal">Cancel
+                                                        </button>
+                                                    </form>
+
+                                                </div>
+
+                                            </div>
+                                        </div>
+                                    </div>
+
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!--users that has subscribed this topic-->
+                <div class="card mt-4" style="font-family: fantasy; border: blue 1px solid">
+                    <div class="card-header bg-primary text-white p-2">
+                        <b>Users : <span th:text="${topic.getName()}"></span></b>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-4">
+                                <a th:href="@{'/userProfile/' + ${userCO.getUserName()}}"><img th:src="${'../images/' + userCO.getPhoto()}" alt="profile-picture" width="100px" height="100px"></a>
+                            </div>
+                            <div class="col-md-8 form-control-sm" style="font-family: fantasy">
+                                <div class="card-title mb-0">
+                                    <a th:href="@{'/userProfile/' + ${userCO.getId()}}"><b><span th:text="${userCO.getFullName()}"></span></b></a>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-6 card-text mt-3">
+                                        <p class="m-0 p-0">Subscriptions</p>
+                                        <p class="m-0 p-0" th:text="${Alltopic.size()}"></p>
+                                    </div>
+                                    <div class="col-6 card-text mt-3">
+                                        <p class="m-0 p-0">Topics</p>
+                                        <p class="m-0 p-0" th:text="${topicList.size()}"></p>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="col-md-7" style="font-family: fantasy">
+
+                <!--posts of topic-->
+                <div class="card" style="border: blue 1px solid">
+                    <div style="font-weight: bold;border-color: white" class="card-header bg-info text-white  ">
+                        <b>Inbox</b>
+                    </div>
+                    <div class="card-body p-2" th:each="subscribedTopic:${subscription}" >
+                        <div class="row" >
+                            <div class="col">
+                                <div class="row"  th:each="linkresource:${subscribedTopic.getTopic().getLinkresourcesList()}">
+                                    <div class="col-md-2">
+                                        <img th:src="@{'images/'+${subscribedTopic.getTopic().getPhoto()}}" alt="image" width="80px"
+                                             height="80px" style="border-radius: 50%">
+                                    </div>
+
+                                    <div class="col-10 pl-0">
+                                        <div class="form-control-md mr-1" style="font-family: fantasy">
+                                            <b></b>
+                                            @<a th:href="@{/UserProfile}" th:text="${subscribedTopic.getTopic().getCreatedBy()}"></a>
+                                            <a th:href="@{'/topics/'+${subscribedTopic.getTopic().id}}" class="float-right" th:text="${subscribedTopic.getTopic().getName()}"></a>
+                                            <small><p th:text="${linkresource.getResourceCreatedOn().seconds}">seconds</p></small>
+                                        </div>
+                                        <div class="card-text form-control-sm"
+                                             style="text-align: justify; font-family: fantasy"   th:text="${linkresource.getDescription()}">
+
+                                        </div>
+                                        <div class="row float-right mr-2">
+                                            <a class="mr-3" th:href="@{'${linkresource.getLinkURL()}'}" target="_blank">View full site</a>
+                                            <a class="mr-3" th:href="@{'/read/'+${linkresource.getId()}}">Mark as read</a>
+                                            <a href="@{/viewPost}">View post</a>
+
+                                        </div>
+                                    </div>
+                                </div>
+
+
+                                <div class="row"  th:each="docresource:${subscribedTopic.getTopic().getDocumentresourcesList()}">
+                                    <div class="col-md-2">
+                                        <img th:src="@{'images/'+${subscribedTopic.getTopic().getPhoto()}}" alt="image" width="80px"
+                                             height="80px" style="border-radius: 50%">
+                                    </div>
+
+                                    <div class="col-10 pl-0">
+                                        <div class="form-control-md mr-1" style="font-family: fantasy">
+                                            <b th:text="${userCO.fullName}"></b>
+                                            @<a th:href="@{/UserProfile}" th:text="${subscribedTopic.getTopic().getCreatedBy()}"></a>
+                                            <a th:href="@{/ViewTopic}" class="float-right" th:text="${subscribedTopic.getTopic().getName()}"></a>
+                                            <span style="text-align: justify; font-family: fantasy" th:text="${docresource.getResourceCreatedOn().seconds}"> sec ago</span>
+
+                                        </div>
+
+                                        <div class="card-text form-control-sm p-0"
+                                             style="text-align: justify; font-family: fantasy"   th:text="${docresource.getDescription()}">
+
+                                        </div>
+                                        <div class="row float-right mr-2">
+                                            <a class="mr-3" th:href="@{${docresource.getPath()}}" download >Download</a>
+                                            <a class="mr-3" th:href="@{/read/${docresource.getId()}}">Mark as read</a>
+                                            <a th:href="@{/posts/${docresource.getId()}}">View post</a>
+
+                                        </div>
+                                    </div>
+                                </div>
+
+
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+                <!--footer-->
+    <div th:include="~{fragments/footer}"></div>
+
+    </div>
+</div>
+</body>
+
+</html>

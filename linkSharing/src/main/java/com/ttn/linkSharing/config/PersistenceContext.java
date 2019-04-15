@@ -24,7 +24,7 @@ import java.util.Properties;
         DataSource dataSource(){
             DriverManagerDataSource driverManagerDataSource = new DriverManagerDataSource();
             driverManagerDataSource.setDriverClassName("com.mysql.jdbc.Driver");
-            driverManagerDataSource.setUrl("jdbc:mysql://localhost:3306/link_Sharing");
+            driverManagerDataSource.setUrl("jdbc:mysql://localhost:3306/link_Share");
             driverManagerDataSource.setUsername("ttn");
             driverManagerDataSource.setPassword("Poojattn");
             return driverManagerDataSource;

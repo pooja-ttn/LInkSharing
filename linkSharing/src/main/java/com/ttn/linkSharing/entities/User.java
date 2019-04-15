@@ -49,17 +49,22 @@ public class User implements Serializable {
    @Column(name = "created_date")
    private Date createdDate;
 
+   @Column(name = "reset_token")
+   private String resetToken;
+
     @Temporal(TemporalType.DATE)
     @UpdateTimestamp
     @Column(name = "updated_date")
     private Date updatedDate;
 
+/*
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "user",orphanRemoval = true)
     private List<Subscription> subscriptions = new ArrayList<>();
+*/
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "user",orphanRemoval = true)
     private List<Rating> ratings = new ArrayList<>();
-
+/*
     public List<Subscription> getSubscriptions() {
         return subscriptions;
     }
@@ -67,7 +72,7 @@ public class User implements Serializable {
     public User setSubscriptions(List<Subscription> subscriptions) {
         this.subscriptions = subscriptions;
         return this;
-    }
+    }*/
 
     public List<Rating> getRatings() {
         return ratings;
@@ -92,6 +97,15 @@ public class User implements Serializable {
 
     public User setId(Integer id) {
         this.id = id;
+        return this;
+    }
+
+    public String getResetToken() {
+        return resetToken;
+    }
+
+    public User setResetToken(String resetToken) {
+        this.resetToken = resetToken;
         return this;
     }
 
@@ -184,5 +198,6 @@ public class User implements Serializable {
         this.updatedDate = updatedDate;
         return this;
     }
+
 
 }

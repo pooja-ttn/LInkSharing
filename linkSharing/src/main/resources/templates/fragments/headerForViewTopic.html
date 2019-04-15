@@ -2,7 +2,7 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Header</title>
+    <title>headerForViewTopic</title>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
           integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
           crossorigin="anonymous">
@@ -17,7 +17,7 @@
 
 </head>
 <body>
-<div th:fragment="header">
+<div th:fragment="headerForViewTopic">
     <nav class="navbar navbar-light bg-light justify-content-between mr-5 ml-5 mt-2 mb-3 pr-5 pl-5 rounded">
         <a class="navbar-brand">
             <img src="images/LinkShare.png" width="40px" height="40px">
@@ -31,15 +31,9 @@
                     </span>
                 </div>
 
-
                 <input class="form-control my-0 py-1" type="text" placeholder="Search" aria-label="Search">
             </div>
 
-
-            <a class="ml-2" href="#" data-toggle="modal" data-target="#createTopicModal"><i
-                    class="fas fa-comment-dots fa-lg text:white"></i></a>
-            <a href="#" class="ml-2" data-toggle="modal" data-target="#sendInvitation"><i
-                    class="fas fa-envelope-square fa-lg"></i></a>
             <a href="#" class="ml-2" data-toggle="modal" data-target="#shareLinkModal"><i class="fas fa-link fa-lg"></i></a>
             <a href="#" class="ml-2" data-toggle="modal" data-target="#shareDocumentModal"><i
                     class="fas fa-sticky-note fa-lg"></i></a>
@@ -68,113 +62,7 @@
                     </a>
                 </div>
             </div>
-            <!--create topic pop-up-->
-            <div class="modal fade" id="createTopicModal" tabindex="-1" role="dialog"
-                 aria-labelledby="createTopicModal" aria-hidden="true">
-                <div class="modal-dialog" role="document">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h4 class="modal-title form-control-sm">Create Topic</h4>
-                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                <span aria-hidden="true">&times;</span>
-                            </button>
-                        </div>
-                        <div class="modal-body">
-                            <form style="font-family: fantasy;" action="#" th:action="@{'/createTopic'}"
-                                  th:object="${topicCO}" method="post">
 
-                                <div class="form-group row">
-                                    <label for="topicName"
-                                           class="col-md-4 col-form-label form-control-sm mb">Name*</label>
-                                    <div class="col-md-8">
-                                        <input type="text" th:field="*{topicName}"
-                                               class="form-control form-control-sm" name="topicName"
-                                               id="topicName" placeholder="Name" REQUIRED>
-                                    </div>
-                                </div>
-                                <div class=" form-group row">
-                                    <label for="visibility" class="col-md-4 ml-2">
-                                        Visibilty:*
-                                    </label>
-
-                                    <div><select name="visibility" class="col-md-8 ml-2 mb-4text-white"
-                                                 th:field="${topicCO.visibility}" id="visibility"
-                                                 style="max-width:100%;">
-                                        <option th:each="visibility:${T(com.ttn.linkSharing.enums.Visibility).values()}"
-                                                th:value="${visibility}"
-                                                th:text="${visibility.getValue()}"></option>
-
-                                    </select>
-                                    </div>
-
-
-                                </div>
-                                <div class="modal-footer">
-                                    <input type="submit" id="createTopicSaveButton" value="SAVE"
-                                           class="btn btn-info btn-sm">
-                                    <button type="button" class="btn btn-info btn-sm" data-dismiss="modal">Close
-                                    </button>
-                                </div>
-                            </form>
-
-                        </div>
-
-
-                    </div>
-                </div>
-            </div>
-
-            <!--send invitation modal-->
-            <div class="modal fade" id="sendInvitation" tabindex="-1" role="dialog"
-                 aria-labelledby="sendInvitation" aria-hidden="true">
-                <div class="modal-dialog" role="document">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h4 class="modal-title form-control-sm">Send Invitation</h4>
-                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                <span aria-hidden="true">&times;</span>
-                            </button>
-                        </div>
-                        <div class="modal-body">
-                            <form method="post" style="font-family:fantasy;" ACTION="#" th:action="@{/invite}">
-                                <div class="form-group row">
-                                    <label for="invitation-Email"
-                                           class="col-md-4 col-form-label form-control-sm mb">Email*</label>
-                                    <div class="col-md-8">
-                                        <input type="text" class="form-control form-control-sm"
-                                               name="invitation-Email"
-                                               id="invitation-Email"  placeholder="Name" REQUIRED>
-                                    </div>
-                                </div>
-                                <div class="form-group row">
-                                    <label
-                                            class="col-md-4 col-form-label form-control-sm">Topic*</label>
-
-                                    <div>
-                                        <select name="invite-topic-name" class="col-md-8 ml-4 mb-4 text-white"
-                                                style="max-width:100%;"
-                                                REQUIRED>
-                                            <option th:each="subscriptionTopicList:${Alltopic}"
-                                                    th:value="${subscriptionTopicList.getTopic().getName()}"
-                                                    th:text="${subscriptionTopicList.getTopic().getName()}"></option>
-
-                                        </select>
-                                    </div>
-
-                                </div>
-                                <div class="modal-footer">
-
-                                <input type="submit"class="btn btn-info btn-sm" value="INVITE"/>
-                                    <button type="button" class="btn btn-info btn-sm" data-dismiss="modal">Cancel
-                                    </button>
-                                </div>
-                            </form>
-
-                        </div>
-
-                    </div>
-                </div>
-            </div>
 
             <!--share document-->
             <div class="modal fade" id="shareDocumentModal" tabindex="-1" role="dialog"
@@ -193,7 +81,7 @@
                                   action="#" style="font-family: fantasy" enctype="multipart/form-data">
                                 <div class="form-group row">
                                     <label
-                                           class="col-md-4 col-form-label form-control-sm mb">Document*</label>
+                                            class="col-md-4 col-form-label form-control-sm mb">Document*</label>
                                     <div class="col-md-8">
                                         <div class="form-group">
                                             <input type="file" class="form-control-file"
@@ -215,26 +103,26 @@
                                 </div>
                                 <div class="form-group row">
                                     <label
-                                           class="col-md-4 col-form-label form-control-sm">Topic*</label>
+                                            class="col-md-4 col-form-label form-control-sm">Topic*</label>
 
                                     <div>
                                         <select name="topic-name" class="col-md-8 ml-2 mb-4 text-black"
-                                                 style="max-width:100%;"
-                                                 REQUIRED>
-                                        <option th:each="subscriptionTopicList:${Alltopic}"
-                                                th:value="${subscriptionTopicList.getTopic().getName()}"
-                                                th:text="${subscriptionTopicList.getTopic().getName()}"></option>
+                                                style="max-width:100%;"
+                                                REQUIRED>
+                                            <option th:each="subscriptionTopicList:${Alltopic}"
+                                                    th:value="${subscriptionTopicList.getTopic().getName()}"
+                                                    th:text="${subscriptionTopicList.getTopic().getName()}"></option>
 
-                                    </select>
+                                        </select>
                                     </div>
                                 </div>
                                 <div>
                                     <div class="modal-footer">
 
-                                    <input type="submit" value="SAVE" class="btn btn-info btn-sm"/>
-                                    <button type="button" class="btn btn-info btn-sm" data-dismiss="modal">Cancel
-                                    </button>
-                                </div>
+                                        <input type="submit" value="SAVE" class="btn btn-info btn-sm"/>
+                                        <button type="button" class="btn btn-info btn-sm" data-dismiss="modal">Cancel
+                                        </button>
+                                    </div>
                                 </div>
 
                             </form>
@@ -268,7 +156,7 @@
                                 <div class="form-group row">
                                     <label for="descpription" class="col-md-4 col-form-label form-control-sm">Description*</label>
                                     <div>
-                                                <textarea class="form-control form-control-sm mt-2 ml-3" th:field="${linkResourceCO.description}"id="descpription" rows="2" required></textarea>
+                                        <textarea class="form-control form-control-sm mt-2 ml-3" th:field="${linkResourceCO.description}"id="descpription" rows="2" required></textarea>
                                     </div>
                                 </div>
                                 <div class="form-group row">
@@ -286,11 +174,11 @@
                                         </select>
                                     </div>
                                 </div>
-                        <div class="modal-footer">
-                            <input type="submit" value="SAVE" class="btn btn-info btn-sm"/>
-                            <button type="button" class="btn btn-info btn-sm" data-dismiss="modal">Cancel
-                            </button>
-                        </div>
+                                <div class="modal-footer">
+                                    <input type="submit" value="SAVE" class="btn btn-info btn-sm"/>
+                                    <button type="button" class="btn btn-info btn-sm" data-dismiss="modal">Cancel
+                                    </button>
+                                </div>
 
                             </form>
                         </div>

@@ -6,6 +6,8 @@ import com.ttn.linkSharing.enums.Visibility;
 public class TopicCO {
 
 
+    private String createdBy;
+
     private String topicName;
 
     private Visibility visibility;
@@ -37,6 +39,15 @@ public class TopicCO {
 
     public TopicCO setTopicName(String topicName) {
         this.topicName = topicName;
+        return this;
+    }
+
+    public String getCreatedBy() {
+        return createdBy;
+    }
+
+    public TopicCO setCreatedBy(String createdBy) {
+        this.createdBy = createdBy;
         return this;
     }
 

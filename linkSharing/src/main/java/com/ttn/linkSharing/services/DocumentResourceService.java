@@ -34,8 +34,6 @@ public class DocumentResourceService {
     @Autowired
     SubscriptionRepository subscriptionRepository;
 
-    @Autowired
-    TopicRepository topicRepository;
 
     @Autowired
     LinkResourceService linkResourceService;
@@ -46,13 +44,16 @@ public class DocumentResourceService {
         public void saveDocument(DocumentResourceCO documentResourceCO, UserDTO userDTO, MultipartFile multipartFile,String topic){
         DocumentResource documentResource= COToEntityViceVersaConvertor.COconvertorToEntity(documentResourceCO);
         User user= DTOToEntityViceVersaConvertor.DTOToEntity(userDTO);
-        Subscription subscription=subscriptionRepository.findByUser_UserNameAndTopic_Name(user.getUserName(),topic);
+
+            Subscription subscription = subscriptionRepository.findByUser_UserNameAndTopic_Name(user.getUserName(), topic);
+
             Topic topic1=subscription.getTopic();
+            logger.debug("subscription------------------------",subscription.getTopic().getName());
             try {
                 byte[] bytes = multipartFile.getBytes();
-                Path path = Paths.get(UPLOAD_FILE + subscription.getTopic()+ "_" + multipartFile.getOriginalFilename());
+                Path path = Paths.get(UPLOAD_FILE +subscription.getTopic().getName() + "_" + multipartFile.getOriginalFilename());
                 Files.write(path, bytes);
-                documentResource.setPath(documentResource.getId() + "_" + multipartFile.getOriginalFilename());
+                documentResource.setPath( subscription.getTopic().getName()+ "_" + multipartFile.getOriginalFilename());
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -62,7 +63,7 @@ public class DocumentResourceService {
         documentResource.setResourceUpdatedOn(new Date());
         documentResourceRepository.save(documentResource);
         topic1.setPostCount(documentResourceRepository.findByTopic(topic1).size()+linkResourceService.linkResourceRepository.findByTopic(topic1).size());
-topicRepository.save(topic1);
+topicService.saveTopic(topic1);
         }
 
 
@@ -72,6 +73,11 @@ topicRepository.save(topic1);
 
        return documentResourceRepository.findByUserAndTopic(user, topic);
 
+    }
+
+
+    public void deletewhereTopicId(Integer integer){
+            documentResourceRepository.deleteAllByTopic_Id(integer);
     }
 
 }

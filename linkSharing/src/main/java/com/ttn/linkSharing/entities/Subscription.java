@@ -23,8 +23,19 @@ public class Subscription implements Serializable {
     private  Topic topic;
 
     @Enumerated(EnumType.STRING)
-    Seriousness seriousness;
+    private Seriousness seriousness;
 
+    /*@Column(name = "read")
+    Boolean read;
+
+    public Boolean isRead() {
+        return read;
+    }
+
+    public Subscription setRead(Boolean read) {
+        this.read = read;
+        return this;
+    }*/
 
     public Integer getId() {
         return id;

@@ -10,4 +10,5 @@ import java.util.List;
 public interface LinkResourceRepository extends CrudRepository<LinkResource,Integer> {
 
     public List<LinkResource>findByTopic(Topic topic);
+    public void deleteAllByTopic_Id(Integer integer);
 }

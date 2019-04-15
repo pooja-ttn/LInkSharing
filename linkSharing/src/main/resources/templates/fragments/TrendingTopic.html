@@ -5,51 +5,76 @@
     <meta charset="UTF-8">
     <title>Trending Topic</title>
 </head>
+<script>
+    $(document).ready(function() {
+        $("#subscribe").on("click", function () {
+            var topicId = $(this).attr("topic-id1");
+            $.ajax({
+                url: "/subscribe",
+                method: "POST",
+                data: {topicId: topicId},
+                success: function (data) {
+                    if (data == "true") {
+                        alert("You subscribed the post!!");
+                        location.reload(true);
+                    }
+
+                    else {
+                        alert("Already Subscribed To this Topic")
+                        location.reload(true);
+
+                    }
+                }
+            });
+
+        });
+    })  ;
+</script>
 <body>
 <div th:fragment="TrendingTopic">
     <div class="card mt-4" style="font-family: fantasy; border: blue 1px solid">
-        <div class="card-header bg-primary text-white p-2">
+        <div style="font-weight: bold;border-color: white" class="card-header bg-info text-white  ">
             <b>Trending Topics</b>
         </div>
-        <div class="card-body p-2">
+        <div class="card-body p-2" th:each="TrendingTopic:${AllTopicList}">
             <div class="row">
                 <div class="col">
                     <div class="row">
                         <div class="col-md-2">
-                            <img th:src="${'images/'+userCO.photo}" alt="image" width="70px"
+                            <img th:src="@{'images/'+${TrendingTopic.getPhoto()}}" alt="image" width="70px"
                                  height="70px" style="border-radius: 50%">
                         </div>
 
                         <div class="col-md-10">
                             <div class="form-control-md ml-2" style="font-family: fantasy">
-                                <a href="#">Topic</a>
+                                <a  th:text="${TrendingTopic.getName()}"></a>
                             </div>
                             <div class="card-text form-control-sm"
                                  style="text-align: justify; font-family: fantasy">
                                 <div class="row mt-2">
                                     <div class="col">
-                                        <div class="p-0">@Username</div>
+                                        <div class="p-0" th:href="@{/userProfile}" >@<span th:text="${TrendingTopic.getCreatedBy()}"></span></div>
                                         <div>
-                                            <a href="#">Unsubscribe</a>
+                                            <a style="color:blue;"   id="subscribe" th:topic-id1="${TrendingTopic.getId()}">subscribe</a>
                                         </div>
                                     </div>
                                     <div class="col">
                                         <div class="p-0">Subscriptions</div>
                                         <div id="subscriptions-trendingTopics">
-                                            <p th:name="subscrption">50</p>
+                                            <p th:name="subscrption" th:text="${TrendingTopic.getSubscriptionCount()}"></p>
                                         </div>
                                     </div>
                                     <div class="col">
                                         <div class="p-0">Post</div>
                                         <div>
-                                            <p th:name="postNumber">3</p>
+                                            <p th:name="postNumber" th:text="${TrendingTopic.getPostCount()}"></p>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-
+<!--
                     <div class="row">
                         <div class="col dropdown show " th:object="${subscriptionCO}">
 
@@ -77,11 +102,11 @@
                             <a href="#"><i class="fas fa-edit fa-lg mr-2"></i></a>
                             <a href="#"><i class="far fa-trash-alt fa-lg"></i></a>
                         </div>
-                    </div>
+                    </div>-->
                 </div>
-            </div>
         </div>
     </div>
+</div>
 </div>
 </body>
 </html>

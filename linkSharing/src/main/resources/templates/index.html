@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 
@@ -15,30 +14,35 @@
         .navbar {
             margin-bottom: 10px;
             border-radius: 0;
+            border: blue;
         }
+
         /* Set gray background color and 100% height */
-      /*  .sidenav {
-            padding-top: 20px;
-            background-color: #f1f1f1;
-            height: 100%;
-        }*/
+        /*  .sidenav {
+              padding-top: 20px;
+              background-color: #f1f1f1;
+              height: 100%;
+          }*/
         /* Set black background color, white text and some padding */
         footer {
             background-color: #555;
             color: white;
-            padding: 15px;
+            padding: 10px;
             margin-top: 10px;
+            border: blue;
+
         }
+
         /* On small screens, set height to 'auto' for sidenav and grid */
-/*        @media screen and (max-width: 767px) {
-            .sidenav {
-                height: auto;
-                padding: 15px;
-            }
-            .row.content {
-                height: auto;
-            }
-        }*/
+        /*        @media screen and (max-width: 767px) {
+                    .sidenav {
+                        height: auto;
+                        padding: 15px;
+                    }
+                    .row.content {
+                        height: auto;
+                    }
+                }*/
     </style>
 </head>
 <body>
@@ -46,7 +50,7 @@
     <nav class="navbar navbar-primary bg-light">
         <a class="navbar-brand" href="#" style="text-decoration: none; color: black">
             <img src="images/LinkShare.png" width="50" height="50" class="d-inline-block align-top" alt="LinkSharing">
-            <h1 style="display: inline-block">Link Sharing</h1>
+            <h1 style="display: inline-block" class="text text-info ">Link Sharing</h1>
         </a>
         <form class="form-inline">
             <input class="form-control mr-md-2" type="search" placeholder="Search" aria-label="Search">
@@ -58,70 +62,84 @@
         <div class="row">
             <div class="col-md-8">
                 <div class="card">
-                    <div class="card-header">
+                    <div style="font-weight: bold;border-color: white" class="card-header bg-info text-white  ">
                         Recent Shares
                     </div>
-                    <div class="card-body">
+                    <div class="card-body" th:each="link:${resourceList}">
                         <div class="row">
                             <div class="col">
                                 <div class="row">
                                     <div class="col-md-2">
-                                        <img src="/images/User.png" alt="image" width="100px"
+                                        <img th:src="@{'images/'+${link.getTopic().photo}}" alt="image" width="100px"
                                              height="100px" style="border-radius: 50%">
                                     </div>
 
-                                    <div class="col-md-10">
-                                        Username
-                                        <div class="card-text" style="text-align: justify; font-size: 14px">
-                                            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Consequuntur
-                                            dolore dolores doloribus earum enim et excepturi facere fuga ipsa ipsum
-                                            nihil, odit quam quas quo quod, reprehenderit similique veritatis, vitae!
+                                    <div class="col-md-10" th:text="${link.topic.createdBy}">
+
+                                        <div class="card-text" style="text-align: justify; font-size: 14px"
+                                             th:text="${link.description}">
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
                         <hr>
+                    </div>
+                    <div class="card-body" th:each="link:${documentList}">
                         <div class="row">
                             <div class="col">
                                 <div class="row">
                                     <div class="col-md-2">
-                                        <img src="/images/User.png" alt="image" width="100px"
-                                             height="100px" style="border-radius: 50%">
+                                        <img th:src="@{'images/'+${link.topic.photo}}" alt="image" width="100px"
+                                             height="100px"
+                                             style="border-radius: 50%">
                                     </div>
-
-                                    <div class="col-md-10">
-                                        Username
-                                        <div class="card-text" style="text-align: justify; font-size: 14px">
-                                            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Consequuntur
-                                            dolore dolores doloribus earum enim et excepturi facere fuga ipsa ipsum
-                                            nihil, odit quam quas quo quod, reprehenderit similique veritatis, vitae!
+                                    <div class="col-md-10" th:text="${link.topic.createdBy}">
+                                        <div class="card-text" style="text-align: justify; font-size: 14px"
+                                             th:text="${link.getDescription()}">
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
+
                 </div>
                 <hr>
                 <div class="card">
-                    <div class="card-header">
+                    <div style="font-weight: bold;border-color: white" class="card-header bg-info text-white  ">
                         Top Posts
                     </div>
-                    <div class="card-body">
+                    <div class="card-body" th:each="link:${resourceList}">
                         <div class="row">
                             <div class="col">
                                 <div class="row">
                                     <div class="col-md-2">
-                                        <img src="/images/User.png" alt="image" width="100px" height="100px"
+                                        <img th:src="@{'images/'+${link.topic.photo}}" alt="image" width="100px"
+                                             height="100px"
                                              style="border-radius: 50%">
                                     </div>
-                                    <div class="col-md-10">
-                                        Username
-                                        <div class="card-text" style="text-align: justify; font-size: 14px">
-                                            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Consequuntur
-                                            dolore dolores doloribus earum enim et excepturi facere fuga ipsa ipsum
-                                            nihil, odit quam quas quo quod, reprehenderit similique veritatis, vitae!
+                                    <div class="col-md-10" th:text="${link.topic.createdBy}">
+                                        <div class="card-text" style="text-align: justify; font-size: 14px"
+                                             th:text="${link.getDescription()}">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-body" th:each="link:${documentList}">
+                        <div class="row">
+                            <div class="col">
+                                <div class="row">
+                                    <div class="col-md-2">
+                                        <img th:src="@{'images/'+${link.topic.photo}}" alt="image" width="100px"
+                                             height="100px"
+                                             style="border-radius: 50%">
+                                    </div>
+                                    <div class="col-md-10" th:text="${link.topic.createdBy}">
+                                        <div class="card-text" style="text-align: justify; font-size: 14px"
+                                             th:text="${link.getDescription()}">
                                         </div>
                                     </div>
                                 </div>
@@ -133,82 +151,95 @@
             <div class="col-md-4 ">
                 <div class="well">
                     <div class="card">
-                        <div class="card-header">
+                        <div style="font-weight: bold;border-color: white" class="card-header bg-info text-white  ">
                             Login
                         </div>
                         <div class="card-body">
-                            <form th:object="${loginCO}" action="#" id="form1" th:action="@{'/loginButton'}" METHOD="post" >
+                            <form th:object="${loginCO}" action="#" id="form1" th:action="@{'/loginButton'}"
+                                  METHOD="post">
                                 <div class="form-group row">
                                     <label for="username-login" class="col-md-4 col-form-label">Username</label>
                                     <div class="col-md-8">
-                                        <input type="text" class="form-control" name="firstName" th:field="*{userName} "id="username-login" placeholder="Username/Email" REQUIRED>
+                                        <input type="text" class="form-control" name="userName" th:field="*{userName} "
+                                               id="username-login" placeholder="Username/Email" REQUIRED>
                                     </div>
                                 </div>
                                 <div class="form-group row">
-                                    <label for="inputPassword"  class="col-md-4 col-form-label">Password</label>
+                                    <label for="inputPassword" class="col-md-4 col-form-label">Password</label>
                                     <div class="col-md-8">
-                                        <input type="password" th:field="*{password}" class="form-control" name="lastName" id="inputPassword" placeholder="Password" REQUIRED>
+                                        <input type="password" th:field="*{password}" class="form-control"
+                                               name="lastName" id="inputPassword" placeholder="Password" REQUIRED>
                                     </div>
                                 </div>
-                                <a href="forget.html">Forgot password?</a>
+                                <a th:href="@{/forgotPassword}">Forgot password?</a>
 
-                                <input type="submit" class="btn btn-primary" value="Login" style="float: right">
-                                <div th:text="${error5}"></div>
 
-                                <div th:if="${#fields.hasErrors('*')}">
+                                <input type="submit" class="btn btn-info" id="Login" value="Login" style="float: right">
+                                <br>
+                                <div class="text text-danger mt-3" th:text="${passWordMsg}?${passWordMsg}"></div>
 
-                                    <div  class="alert alert-warning alert-dismissable"><a class="close" data-dismiss="alert" href="#">x</a>
-                                        <ul><li th:each="err : ${#fields.errors('*')}" th:text="${err}">Input is incorrect</li></ul>
-                                    </div></div>
+                                <div class="text text-danger mt-3" th:text="${inactiveMsg}?${inactiveMsg}"></div>
+
+
+                                <div class="text text-success mt-3"
+                                     th:text="${successMessage1}?${successMessage1}"></div>
+
                             </form>
                         </div>
                     </div>
                 </div>
                 <hr>
                 <div class="card">
-                    <div class="card-header">
+                    <div style="font-weight: bold;border-color: white" class="card-header bg-info text-white  ">
                         Register
                     </div>
                     <div class="card-body">
-                        <form th:action="@{'/registerButton'}" action="#" th:object="${userCO}" id="form2" method=POST ENCTYPE="multipart/form-data">
+                        <form th:action="@{'/registerButton'}" action="#" th:object="${userCO}" id="form2" method=POST
+                              ENCTYPE="multipart/form-data">
                             <div class="form-group row">
                                 <label for="firstName" class="col-md-4 col-form-label">First Name: </label>
                                 <div class="col-md-8">
-                                    <input type="text" class="form-control" th:field="*{firstName}" id="firstName" name="firstName" placeholder="First Name" REQUIRED>
+                                    <input type="text" class="form-control" th:field="*{firstName}" id="firstName"
+                                           name="firstName" placeholder="First Name" REQUIRED>
                                 </div>
                             </div>
                             <div class="form-group row">
                                 <label for="lastName" class="col-md-4 col-form-label">Last Name: </label>
                                 <div class="col-md-8">
-                                    <input type="text" class="form-control" id="lastName"th:field="*{lastName}" name="lastName" placeholder="Last Name" REQUIRED>
+                                    <input type="text" class="form-control" id="lastName" th:field="*{lastName}"
+                                           name="lastName" placeholder="Last Name" REQUIRED>
                                 </div>
                             </div>
                             <div class="form-group row">
                                 <label for="email" class="col-md-4 col-form-label">Email: </label>
                                 <div class="col-md-8">
-                                    <input type="text" class="form-control" id="email" th:field="*{email}"name="email" placeholder="Email" REQUIRED>
+                                    <input type="text" class="form-control" id="email" th:field="*{email}" name="email"
+                                           placeholder="Email" REQUIRED>
                                 </div>
-                                <div style="color:red" id="error1"></div>
+                                <div style="color:red" id="emailMsg"></div>
                             </div>
                             <div class="form-group row">
                                 <label for="userName" class="col-md-4 col-form-label">Username: </label>
                                 <div class="col-md-8">
-                                    <input type="text" class="form-control" id="userName" th:field="*{userName}" name="userName" placeholder="Username" REQUIRED>
+                                    <input type="text" class="form-control" id="userName" th:field="*{userName}"
+                                           name="userName" placeholder="Username" REQUIRED>
                                 </div>
-                                <div style="color:red"  id="unameMsg"></div>
+                                <div style="color:red" id="unameMsg"></div>
 
                             </div>
                             <div class="form-group row">
                                 <label for="password" class="col-md-4 col-form-label">Password: </label>
                                 <div class="col-md-8">
-                                    <input type="password" class="form-control" id="password" th:field="*{password}" placeholder="Password" REQUIRED>
+                                    <input type="password" class="form-control" id="password" th:field="*{password}"
+                                           placeholder="Password" REQUIRED>
                                 </div>
                                 <p style="color:red" id="passwordMsg"></p>
                             </div>
                             <div class="form-group row">
                                 <label for="confirmPassword" class="col-md-4 col-form-label">Confirm Password: </label>
                                 <div class="col-md-8">
-                                    <input type="password" class="form-control" id="confirmPassword" th:field="*{confirmPassword}" placeholder="Confirm Password" REQUIRED></div>
+                                    <input type="password" class="form-control" id="confirmPassword"
+                                           th:field="*{confirmPassword}" placeholder="Confirm Password" REQUIRED></div>
                                 <div style="color:red" id="error"></div>
                             </div>
                             <div class="form-group row">
@@ -216,47 +247,44 @@
                                     Photo:
                                 </label>
                                 <div class="col-md-8">
-                                            <div class="form-group">
-                                                <input type="file" name="pic" class="form-control-file" id="exampleFormControlFile1" REQUIRED>
-                                            </div>
+                                    <div class="form-group">
+                                        <input type="file" accept="image/*" name="pic" class="form-control-file"
+                                               id="exampleFormControlFile1">
                                     </div>
+                                </div>
                             </div>
                             <div th:if="${#fields.hasErrors()}">
-                            <div class="alert alert-danger" th:if="${#fields.hasErrors('*')}">
-                                <p th:each="err : ${#fields.errors('*')}" th:text="${err}"></p>
-                            </div></div>
+                                <div class="alert alert-danger" th:if="${#fields.hasErrors('*')}">
+                                    <p th:each="err : ${#fields.errors('*')}" th:text="${err}"></p>
+                                </div>
+                            </div>
 
                             <div class="btn btn-center mt-3">
-                            <input type="submit" class="btn btn-primary float-right" id="registerButton1" value="Register">
-                        </div>
+                                <input type="submit" class="btn btn-info float-right" id="registerButton1"
+                                       value="Register">
+                            </div>
                         </form>
-                    </form>
+                        </form>
+                    </div>
                 </div>
             </div>
         </div>
+
+        <footer class="container-container text-center">
+            <p><strong>Copyright © 2017-2018 <a href="http://tothenew.com" target="_blank">TO THE NEW</a>.
+            </strong></p>
+        </footer>
     </div>
 
-    <footer class="container-container text-center">
-        <p><strong>Copyright © 2017-2018 <a href="http://tothenew.com" target="_blank">TO THE NEW</a>.
-        </strong></p>
-    </footer>
-</div>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+            integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+            crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js"
+            integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
+            crossorigin="anonymous" type="application/javascript">
+    </script>
 
-<!--<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
-        integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
-        crossorigin="anonymous"></script>-->
-<!--<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
-        integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
-        crossorigin="anonymous"></script>-->
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
-        integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
-        crossorigin="anonymous"></script>
-<script src="https://code.jquery.com/jquery-3.3.1.min.js"
-        integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
-        crossorigin="anonymous" type="application/javascript">
-</script>
-
-<script type="application/javascript" th:src="@{'/js/application.js'}"></script>
+    <script type="application/javascript" th:src="@{'/js/application.js'}"></script>
 
 </div>
 </body>

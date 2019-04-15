@@ -18,12 +18,74 @@
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
             integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
             crossorigin="anonymous"></script>
+
+
+    <script>
+
+        $(document).ready(function() {
+            $("#unsubscribe").on("click", function () {
+                var topicId = $(this).attr("topic-id");
+                $.ajax({
+                    url: "/unsubscribe",
+                    method: "POST",
+                    data: {topicId: topicId},
+                    success: function () {
+                        alert("You unsubscribed the post!!");
+                        location.reload(true);
+                    }
+                });
+
+            });
+        })  ;
+
+
+
+        function showEditTopic(el) {
+            var id = el.getAttribute("data-topic-id");
+
+            $(".old-topic"+id).css("display","none");
+            $("#edit-topic-"+id).css("display","block");
+            $("#cancel"+id).css("display","block");
+        }
+
+        function hideEdittopic(el) {
+            var id = el.getAttribute("data-topic-id");
+
+            $(".old-topic"+id).css("display","block");
+            $("#edit-topic-"+id).css("display","none");
+            $(el).css("display","none");
+        }
+
+    </script>
 </head>
 <body>
 <div class="container-fluid">
 
     <!--navigatioin bar-->
     <div th:include="~{fragments/header}"></div>
+
+    <div th:if="${TopicCreated}">
+
+        <div class="alert alert-success alert-dismissible" th:text="${TopicCreated}">
+            <a href="#" class="close" data-dismiss="alert" aria-label="close">X</a>
+
+        </div>
+    </div>
+    <div th:if="${LinkMsg}">
+
+        <div class="alert alert-success alert-dismissible" th:text="${LinkMsg}">
+            <a href="#" class="close" data-dismiss="alert" aria-label="close">X</a>
+
+        </div>
+    </div>
+
+    <div th:if="${DocumentMsg}">
+
+        <div class="alert alert-success alert-dismissible" th:text="${DocumentMsg}">
+            <a href="#" class="close" data-dismiss="alert" aria-label="close">X</a>
+
+        </div>
+    </div>
 
     <!--dashboard body-->
     <div class="container-fluid">
@@ -35,7 +97,7 @@
 
                 <!--subscription-->
                 <div class="card mt-4" style="font-family: fantasy; border: blue 1px solid">
-                    <div class="card-header bg-primary text-white p-2">
+                    <div style="font-weight: bold;border-color: white" class="card-header bg-info text-white  ">
                         <b>Subscriptions</b>
                     </div>
                     <div class="card-body p-2" >
@@ -46,15 +108,23 @@
                             <div class="col">
                                 <div class="row">
                                     <div class="col-md-2">
-                                        <img th:src="${'images/'+subscribedTopic.getUser().photo}" alt="image" width="70px"
+                                        <img th:src="${'images/'+subscribedTopic.getTopic().getPhoto()}" alt="image" width="70px"
                                              height="70px" style="border-radius: 50%">
                                     </div>
 
                                     <div class="col-md-10">
                                         <div class="form-control-md ml-2" style="font-family: fantasy">
-                                            <a href="#" th:text="${subscribedTopic.getTopic().getName()}"></a>
-
-
+                                            <a th:href="@{'/topics/'+ ${subscribedTopic.getTopic().getId()}}" th:class="'old-topic'+${subscribedTopic.getId()}" th:value="${subscribedTopic.getTopic().getName()}" th:text="${subscribedTopic.getTopic().getName()}"></a>
+                                            <form action="/editTopic" method="post" style="display: none" class="edit-topic" th:id="'edit-topic-'+${subscribedTopic.getTopic().getId()}">
+                                                <input type="text"
+                                                       th:placeholder="${subscribedTopic.getTopic().getName()}"
+                                                       name="newtopic">
+                                                <input type="hidden" th:value="${subscribedTopic.getId()}" name="id">
+                                                <input type="submit" value="Update">
+                                            </form>
+                                            <button onclick="hideEdittopic(this)"
+                                                    th:id="'cancel'+${subscribedTopic.getTopic().getId()}"
+                                                    th:data-topic-id="${subscribedTopic.getTopic().getId()}" style="display: none">Cancel</button>
                                         </div>
                                         <div class="card-text form-control-sm"
                                              style="text-align: justify; font-family: fantasy">
@@ -64,8 +134,7 @@
 
                                                     </div>
                                                     <div>
-
-                                                        <a href="#">Unsubscribe</a>
+                                                        <a style="color:blue;"   id="unsubscribe" th:topic-id="${subscribedTopic.getTopic().getId()}">Unsubscribe</a>
                                                     </div>
                                                 </div>
                                                 <div class="col">
@@ -79,13 +148,78 @@
                                                     <div class="p-0">Post</div>
                                                     <div>
                                                         <p th:name="postNumber" th:text="${subscribedTopic.topic.postCount}">
-                                                        </p>
+                                                       </p>
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
+
+
+
+
+
+
+
+
+
+                                <div class="modal fade" id="sendInvitation1" tabindex="-1" role="dialog"
+                                     aria-labelledby="sendInvitation" aria-hidden="true">
+                                    <div class="modal-dialog" role="document">
+                                        <div class="modal-content">
+                                            <div style="font-weight: bold;border-color: white" class="card-header bg-info text-white  ">
+                                                <h4 class="modal-title form-control-sm">Send Invitation</h4>
+                                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                    <span aria-hidden="true">&times;</span>
+                                                </button>
+                                            </div>
+                                            <div class="modal-body">
+                                                <form method="post" style="font-family:fantasy;" ACTION="#" th:action="@{/invite}">
+                                                    <div class="form-group row">
+                                                        <label for="invitation-Email"
+                                                               class="col-md-4 col-form-label form-control-sm mb">Email*</label>
+                                                        <div class="col-md-8">
+                                                            <input type="text" class="form-control form-control-sm"
+                                                                   name="invitation-Email"
+                                                                   id="invitation-Email"  placeholder="Name" REQUIRED>
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group row">
+                                                        <label
+                                                                class="col-md-4 col-form-label form-control-sm">Topic*</label>
+
+                                                        <input readonly type="text" name="invite-topic-name"   th:placeholder="${subscribedTopic.getTopic().getName()}" class="col-md-8 mb-4 text-black"
+                                                       th:value="${subscribedTopic.getTopic().getName()}" />
+
+
+                                                    </div>
+
+                                                    <input type="submit"class="btn btn-primary btn-sm" value="INVITE"/>
+                                                    <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">Cancel
+                                                    </button>
+                                                </form>
+
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
                                 <div class="row">
                                     <div class="col dropdown show " th:object="${subscriptionCO}">
@@ -99,7 +233,7 @@
                                         </select>
                                         </div>
                                     </div>
-                                    <div class="col dropdown show m-0" th:object="${topicCO}">
+                                    <div th:if="${userCO.userName}=='admin' OR ${userCO.userName}==${subscribedTopic.topic.createdBy}" class="col dropdown show m-0" th:object="${topicCO}">
 
                                         <div><select name="visibility" class="col-md-4 ml-2 mb-4 text-black"
                                                      th:field="${topicCO.visibility}" id="visibility"
@@ -115,9 +249,11 @@
                                     </div>
 
                                         <div class="col float-right">
-                                            <a href="#"><i class="far fa-envelope fa-lg mr-2"></i></a>
-                                            <a href="#"><i class="fas fa-edit fa-lg mr-2"></i></a>
-                                            <a href="#"><i class="far fa-trash-alt fa-lg"></i></a>
+                                            <a  href="#"><i data-toggle="modal" data-target="#sendInvitation1" class="far fa-envelope fa-lg mr-2" ></i></a>
+                                            <a  th:if="${userCO.userName}=='admin' OR ${userCO.userName}==${subscribedTopic.topic.createdBy}" id="edit-topic">
+                                                <i class="fas fa-edit fa-lg mr-2" onclick="showEditTopic(this)" th:data-topic-id="${subscribedTopic.getTopic().getId()}"></i>
+                                            </a>
+                                            <a th:if="${userCO.userName}=='admin' OR ${userCO.userName}==${subscribedTopic.topic.createdBy}" th:href="@{'/delete/'+${subscribedTopic.id}}"><i class="far fa-trash-alt fa-lg"></i></a>
                                         </div>
                                     </div>
                                 </div>
@@ -125,7 +261,7 @@
                         </div>
                     </div>
 
-                    <!--trending topics-->
+                <!--trending topics-->
                     <div th:include="~{fragments/TrendingTopic}"></div>
                 </div>
 
@@ -133,40 +269,74 @@
 
                     <!--inbox-->
                     <div class="card" style="border: blue 1px solid">
-                        <div class="card-header bg-primary text-white p-2">
+                        <div style="font-weight: bold;border-color: white" class="card-header bg-info text-white  ">
                             <b>Inbox</b>
                         </div>
-                        <div class="card-body p-2">
-                            <div class="row">
+
+                        <div class="card-body p-2" th:each="subscribedTopic:${Alltopic}" >
                                 <div class="col">
-                                    <div class="row">
+                                    <div class="row"  th:each="linkresource:${subscribedTopic.getTopic().getLinkresourcesList()}">
                                         <div class="col-md-2">
-                                            <img th:src="${'images/'+userCO.photo}" alt="image" width="80px"
+                                            <img th:src="@{'images/'+${subscribedTopic.getTopic().getPhoto()}}" alt="image" width="80px"
                                                  height="80px" style="border-radius: 50%">
                                         </div>
 
                                         <div class="col-10 pl-0">
                                             <div class="form-control-md mr-1" style="font-family: fantasy">
-                                                <b>Username</b>
-                                                <a href="#">@userid</a>
-                                                <a href="#" class="float-right">Topic</a>
+                                                <b></b>
+                                                @<a th:href="@{/UserProfile}" th:text="${subscribedTopic.getTopic().getCreatedBy()}"></a>
+                                                <a th:href="@{/topics/${subscribedTopic.getTopic().getId()}}" class="float-right" th:text="${subscribedTopic.getTopic().getName()}"></a>
+                                                <small><span th:text="${linkresource.getResourceCreatedOn().seconds}">seconds</span></small>
                                             </div>
-                                            <div class="card-text form-control-sm p-0"
-                                                 style="text-align: justify; font-family: fantasy">
-                                                Lorem ipsum dolor sit amet, consectetur adipisicing elit. Consequuntur
-                                                dolore dolores doloribus earum enim et excepturi facere fuga ipsa ipsu
+                                            <div class="card-text form-control-sm"
+                                                 style="text-align: justify; font-family: fantasy"   th:text="${linkresource.getDescription()}">
+
                                             </div>
                                             <div class="row float-right mr-2">
-                                                <a class="mr-3" href="" download >Download</a>
-                                                <a class="mr-3" href="#" target="_blank">View full site</a>
-                                                <a class="mr-3" href="#">Mark as read</a>
-                                                <a href="/resource">View post</a>
+                                                <a class="mr-3" th:href="@{${linkresource.getLinkURL()}}" target="_blank">View full site</a>
+                                                <a class="mr-3" th:href="@{/read/${linkresource.getId()}}">Mark as read</a>
+                                                <a   th:href="@{/viewPost/${linkresource.getId()}}">View post</a>
+
                                             </div>
                                         </div>
                                     </div>
+
+
+                                    <div class="row"  th:each="docresource:${subscribedTopic.getTopic().getDocumentresourcesList()}">
+                                        <div class="col-md-2">
+                                            <img th:src="@{'images/'+${subscribedTopic.getTopic().getPhoto()}}" alt="image" width="80px"
+                                                 height="80px" style="border-radius: 50%">
+                                        </div>
+
+                                        <div class="col-10 pl-0">
+                                            <div class="form-control-md mr-1" style="font-family: fantasy">
+                                                <b th:text="${userCO.fullName}"></b>
+                                                @<a th:href="@{/UserProfile}" th:text="${subscribedTopic.getTopic().getCreatedBy()}"></a>
+                                                <a th:href="@{/ViewTopic}" class="float-right" th:text="${subscribedTopic.getTopic().getName()}"></a>
+                                                <span style="text-align: justify; font-family: fantasy" th:text="${docresource.getResourceCreatedOn().seconds}"> sec ago</span>
+
+                                            </div>
+
+                                            <div class="card-text form-control-sm p-0"
+                                                 style="text-align: justify; font-family: fantasy"   th:text="${docresource.getDescription()}">
+
+                                            </div>
+                                            <div class="row float-right mr-2">
+                                                <a class="mr-3" th:href="@{'/documents/'+${docresource.getPath()}}" download >Download</a>
+                                                <a class="mr-3" th:href="@{/read/${docresource.getId()}}">Mark as read</a>
+                                                <a th:href="@{/posts/${docresource.getId()}}">View post</a>
+
+                                            </div>
+                                        </div>
+                                    </div>
+
+
+
                                 </div>
+
                             </div>
                         </div>
+
                     </div>
                 </div>
             </div>

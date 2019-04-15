@@ -3,6 +3,7 @@ package com.ttn.linkSharing.CO;
 public class LoginCO {
 
     private String userName;
+    private Boolean active;
 
     private String password;
     private  String email;
@@ -22,6 +23,15 @@ public class LoginCO {
 
     public LoginCO setUserName(String userName) {
         this.userName = userName;
+        return this;
+    }
+
+    public Boolean getActive() {
+        return active;
+    }
+
+    public LoginCO setActive(Boolean active) {
+        this.active = active;
         return this;
     }
 

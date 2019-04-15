@@ -10,7 +10,6 @@ import java.io.Serializable;
 
 @Entity
 @Table(name = "document_resource")
-
 public class DocumentResource extends Resource implements Serializable {
 
     private String path;

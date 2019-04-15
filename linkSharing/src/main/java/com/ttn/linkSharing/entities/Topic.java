@@ -38,8 +38,13 @@ public class Topic implements Serializable {
     @Column(name = "post_count")
     private Integer postCount;
 
+
+
     @Column(name = "subscription_count")
     private Integer subscriptionCount;
+
+    @Column(name = "user_photo")
+    private String photo;
 
     public Integer getPostCount() {
         return postCount;
@@ -50,6 +55,15 @@ public class Topic implements Serializable {
         return this;
     }
 
+
+    public String getPhoto() {
+        return photo;
+    }
+
+    public Topic setPhoto(String photo) {
+        this.photo = photo;
+        return this;
+    }
     public Integer getSubscriptionCount() {
         return subscriptionCount;
     }
@@ -58,9 +72,13 @@ public class Topic implements Serializable {
         this.subscriptionCount = subscriptionCount;
         return this;
     }
-/*
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "topic")
-    private List<Resource> resourcesList = new ArrayList<>();*/
+
+    @OneToMany( mappedBy = "topic")
+    private List<LinkResource> linkresourcesList = new ArrayList<>();
+
+    @OneToMany( mappedBy = "topic")
+    private List<DocumentResource> documentresourcesList = new ArrayList<>();
+
 
  /*   @OneToMany(cascade = CascadeType.ALL, mappedBy = "topic")
     private List<Subscription> subscriptions = new ArrayList<>();*/
@@ -146,4 +164,22 @@ public class Topic implements Serializable {
         this.subscriptions = subscriptions;
         return this;
     }*/
+
+    public List<LinkResource> getLinkresourcesList() {
+        return linkresourcesList;
+    }
+
+    public Topic setLinkresourcesList(List<LinkResource> linkresourcesList) {
+        this.linkresourcesList = linkresourcesList;
+        return this;
+    }
+
+    public List<DocumentResource> getDocumentresourcesList() {
+        return documentresourcesList;
+    }
+
+    public Topic setDocumentresourcesList(List<DocumentResource> documentresourcesList) {
+        this.documentresourcesList = documentresourcesList;
+        return this;
+    }
 }
